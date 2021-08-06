@@ -37,7 +37,9 @@ $$
 h(x; \theta ) = \begin{cases}  +1 &  \text {if } \theta ^ Tx > 0 \\ -1 &  \text {otherwise.} \end{cases}
 $$
 
-without a specific separator $\theta_0$. Obv, this must go through the origin. But we can convert any porblem involving a linear separator *with* offset into one ***without*** an offset (but in higher dimension).
+without a specific separator $\theta_0$. Obv, this must go through the origin. Assume that a linear classifier without an offset specified is one through the origin. Note that $\theta \cdot x = -\theta \cdot x$ in this case -- our signs flip, but we classify the same.
+
+We can convert any problem involving a linear separator *with* offset into one ***without*** an offset (but in higher dimension).
 
 The way this works:
 
@@ -55,11 +57,11 @@ You can also create simplified perceptron algo if we restrict ourselves to separ
 
 $\theta = [0\space0\space0 \dots 0]^T \\ \textbf{for} \space t=1 \space \textbf{to} \space \tau \\ \hspace{3mm} \textbf{for} \space i=1 \space \textbf{to} \space n \\ \hspace{6mm} \textbf{if} \space y^{(i)}(\theta^Tx^{(i)})\leq0 \\ \hspace{9mm} \theta = \theta + y^{(i)}x^{(i)} \\ \hspace{9mm}$
 
-## Proof of the perceptron algorithm
+## Proof of the perceptron Convergence Theorem
 
 For this, assume that we're constrained to separators through the origin.
 
-**Linear Separability (through the origin)**: A data set D is linearly separable if there is some $\theta$ s.t. $y^{(i)}(\theta^Tx^{(i)})>0$ for all i
+**Linear Separability (through the origin)**: A data set D is linearly separable if there is some $\theta$ s.t. $y^{(i)}(\theta^Tx^{(i)})>0$ for all $i$
 
 **Margin of a labeled data point** (x,y) w.r.t. a separator $\theta$ = 
 $$
@@ -70,7 +72,25 @@ I.e. the *signed distance* between the hyperplane and the point $x$ multiplied b
 **Margin of a data set D w.r.t. $\theta$**
 
 $$
-min_i \space \space y^{(i)}\frac{\theta^T x}{||\theta||}$$
+min_i (y^{(i)}\frac{\theta^T x}{||\theta||})$$
 
 You pick the smallest of the *data point* margins for this!!
 Obivously, this is positive if $\theta$ correctly classifies everything.
+
+
+### Perceptron Convergence Theorem
+If:
+
+1. There is $\theta^*$ such that $y^(i)\frac{\theta^* x^{(i)}}{||\theta^*||} \geq \gamma$ for all $i$
+   *  Equivalent to saying that margin of $\theta^*$ w.r.t $D$ $\geq \gamma$
+2. $||x^{(i)}|| \leq R$
+   * i.e. your points are within a circle of radius R
+3. Our dataset $D$ is linearly separable
+
+Then the perceptron will make at most $\frac{R}{\gamma}^2$ mistakes. A "mistake" is when you get to the innermost loop - as in you don't get the right prediction. 
+
+Note that $R$ and $\gamma$ are in the same "units" - so changing units won't make this huge. Think of gamma as the gap between your data - you want this to be large.
+
+The proof itself is interesting - they want to show that $cos(\theta^*, \theta^k)$. Know that this is equal to $\theta^*\theta^k)/(||\theta^*||*||\theta^k||)$. You want to show that $\theta^k$ converges to $\theta^*$ - so our cosine should equal 1. You do this by induction. The key step here is remembering that $2y^(i)+y^{(i)}\theta^{(k-1)}\cdot x^{(i)}$ is *negative* because of our induction assumption
+
+Remember that $||x+y||^2 = ||x^2|| + 2x\cdot y + ||y^2||$
