@@ -57,6 +57,8 @@ You can also create simplified perceptron algo if we restrict ourselves to separ
 
 $\theta = [0\space0\space0 \dots 0]^T \\ \textbf{for} \space t=1 \space \textbf{to} \space \tau \\ \hspace{3mm} \textbf{for} \space i=1 \space \textbf{to} \space n \\ \hspace{6mm} \textbf{if} \space y^{(i)}(\theta^Tx^{(i)})\leq0 \\ \hspace{9mm} \theta = \theta + y^{(i)}x^{(i)} \\ \hspace{9mm}$
 
+Note that in the case that we go through the origin, the perceptron will **ALWAYS** make a mistake if $\theta_0 = [0,0]$ (obviously).
+
 ## Proof of the perceptron Convergence Theorem
 
 For this, assume that we're constrained to separators through the origin.
