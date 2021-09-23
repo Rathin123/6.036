@@ -89,7 +89,7 @@ If:
    * i.e. your points are within a circle of radius R
 3. Our dataset $D$ is linearly separable
 
-Then the perceptron will make at most $\frac{R}{\gamma}^2$ mistakes. A "mistake" is when you get to the innermost loop - as in you don't get the right prediction. 
+Then the perceptron will make at most $(\frac{R}{\gamma})^2$ mistakes. A "mistake" is when you get to the innermost loop - as in you don't get the right prediction. 
 
 Note that $R$ and $\gamma$ are in the same "units" - so changing units won't make this huge. Think of gamma as the gap between your data - you want this to be large.
 
