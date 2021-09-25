@@ -83,7 +83,7 @@ Obivously, this is positive if $\theta$ correctly classifies everything.
 ### Perceptron Convergence Theorem
 If:
 
-1. There is $\theta^*$ such that $y^(i)\frac{\theta^* x^{(i)}}{||\theta^*||} \geq \gamma$ for all $i$
+1. There is $\theta^*$ such that $y^{(i)}\frac{\theta^* x^{(i)}}{||\theta^*||} \geq \gamma$ for all $i$
    *  Equivalent to saying that margin of $\theta^*$ w.r.t $D$ $\geq \gamma$
 2. $||x^{(i)}|| \leq R$
    * i.e. your points are within a circle of radius R
@@ -93,6 +93,6 @@ Then the perceptron will make at most $(\frac{R}{\gamma})^2$ mistakes. A "mistak
 
 Note that $R$ and $\gamma$ are in the same "units" - so changing units won't make this huge. Think of gamma as the gap between your data - you want this to be large.
 
-The proof itself is interesting - they want to show that $cos(\theta^*, \theta^k)$. Know that this is equal to $\theta^*\theta^k)/(||\theta^*||*||\theta^k||)$. You want to show that $\theta^k$ converges to $\theta^*$ - so our cosine should equal 1. You do this by induction. The key step here is remembering that $2y^(i)+y^{(i)}\theta^{(k-1)}\cdot x^{(i)}$ is *negative* because of our induction assumption
+The proof itself is interesting - they want to show that $cos(\theta^*, \theta^k)$. Know that this is equal to $\theta^*\theta^k)/(||\theta^*||*||\theta^k||)$. You want to show that $\theta^k$ converges to $\theta^*$ - so our cosine should equal 1. You do this by induction. The key step here is remembering that $2y^{(i)}+y^{(i)}\theta^{(k-1)}\cdot x^{(i)}$ is *negative* because of our induction assumption
 
 Remember that $||x+y||^2 = ||x^2|| + 2x\cdot y + ||y^2||$
