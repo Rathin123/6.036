@@ -480,7 +480,7 @@ def test_xval_learning_alg(xval_learning_alg,perceptron):
 ######################################################################
 # Your code is written below
 
-def perceptron(data, labels, params={}, hook=None):
+def perceptron(data, labels, params={}, hook=None, count = False):
     # if T not in params, default to 100
     T = params.get('T', 100)
     # Your implementation here
@@ -489,18 +489,24 @@ def perceptron(data, labels, params={}, hook=None):
     th = np.zeros(d)
     th0 = np.array(0)
     
+    counter = 0
+
     for t in range(T):
         for i in range(n):
             if labels[0][i]*(th.T.dot(data[:,i])+th0) <= 0:
                 th = th + labels[0][i]*data[:,i]
                 th0 = th0 + labels[0][i]
+                counter += 1
                 if hook:
                     hook((np.swapaxes(np.array([th]),0,1), np.array([th0])))
     
     theta = np.swapaxes(np.array([th]),0,1)
     theta_0 =  np.array([th0])
 
-    return (theta, theta_0)
+    if count:
+        return (theta, theta_0, counter)
+    else:
+        return (theta, theta_0)
 
 #Visualization of perceptron, comment in the next three lines to see your perceptron code in action:
 '''
@@ -647,3 +653,40 @@ print(eval_learning_alg_test(perceptron, gen_flipped_lin_separable(pflip=.25), 2
 
 print("averaged perceptron, .25 percent probability, test data:")
 print(eval_learning_alg_test(averaged_perceptron, gen_flipped_lin_separable(pflip=.25), 20, 20, 5))
+
+### Week 3
+
+#hw p1
+
+data = np.array([[.2, .8, .2, .8],
+            [0.2,  0.2,  0.8,  0.8]])
+labels = np.array([[-1, -1, 1, 1]])
+theta = np.array([[0,1]])
+
+print(perceptron(data, labels, count = True, params={'T' : 50}))
+
+#hw p2
+
+data =   np.array([[2, 3,  4,  5]])
+labels = np.array([[1, 1, -1, -1]])
+
+print(perceptron(data, labels))
+
+def one_hot(x, k):
+    to_return = np.zeros((k,1))
+    to_return[x-1][0] = 1
+    
+    return to_return
+
+#concat to stack these horizontally into a single matrix
+one_hot_data = np.concatenate([one_hot(ele, 6) for ele in data[0,:]],axis = 1)
+print(one_hot_data)
+print(perceptron(one_hot_data,labels))
+
+#p2f
+data =   np.array([[1, 2, 3, 4, 5, 6]])
+labels = np.array([[1, 1, -1, -1, 1, 1]])
+
+one_hot_data = np.concatenate([one_hot(ele, 6) for ele in data[0,:]],axis = 1)
+print(one_hot_data)
+print(perceptron(one_hot_data,labels))

@@ -1,5 +1,7 @@
 # Week 3 - Feature Representation
 
+## Polynomial Basis
+
 She starts out with the explanation of the offsets from last class. This was a transform that allowed you achange a separator that did not go through the origing into one that did, in $d+1$ dimensions. She defines a transform from $R^d$ to $R^D$. It assumes that you have a linear separator in the lower dimensional space.
 
 They provide an interesting example of this. Consider this: ![xor dataset](https://openlearninglibrary.mit.edu/assets/courseware/v1/7113a168fd1cb279b0a1548c7e16c08c/asset-v1:MITx+6.036+1T2019+type@asset+block/images_feature_representation_top_tikzpicture_1-crop.png).
@@ -31,7 +33,7 @@ Note that this is not a linear separator, tho. In a slightly different setup, we
 
 ![after 65 iterations...](https://openlearninglibrary.mit.edu/assets/courseware/v1/4b61c604452f9f0d62c39ec28345ce8e/asset-v1:MITx+6.036+1T2019+type@asset+block/images_feature_representation_2.png). 
 
-Why does this take so many iterations? Remember $(R/\gamma^2)$ from the convergence theorem. The radius of the circle it would fit in is small, so R is small. BUT your gamma - the measure of how "separable" the data is - is really small, so it takes longer to get to the answer.
+Why does this take so many iterations? Remember $(R/\gamma)^2$ from the convergence theorem. The radius of the circle it would fit in is *further from 0$ so R is larger. I think your gamma - the measure of how "separable" the data is - gets smaller too since you're in a higher dimensional space? But R grows faster than $\gamma$.
 
 And here's a harder dataset. They are after 200 iterations, with bases of order 2, 3, 4, and 5.
 
@@ -39,3 +41,34 @@ And here's a harder dataset. They are after 200 iterations, with bases of order 
 ![order 3](https://openlearninglibrary.mit.edu/assets/courseware/v1/2fa58ddc29ad247b6937521bd7d0cce1/asset-v1:MITx+6.036+1T2019+type@asset+block/images_feature_representation_4.png)
 ![order 4](https://openlearninglibrary.mit.edu/assets/courseware/v1/722b0abd100d03c738617979ddce8a62/asset-v1:MITx+6.036+1T2019+type@asset+block/images_feature_representation_5.png)
 ![order 5](https://openlearninglibrary.mit.edu/assets/courseware/v1/ee0ef00782fd3da6f009fee4baf10dd5/asset-v1:MITx+6.036+1T2019+type@asset+block/images_feature_representation_6.png)
+
+## Features
+
+### Discrete
+
+Discrete features are important because you want the learner to find underlying regularities. We'll assume that these input vectors x are in $\R^d$, so we want to convert these discrete vectors into vectors of real numbers.
+
+Some common strategies:
+
+* **Numeric** - assign these values a number, like $1.0/k, 2.0/k,...1.0$. We could also do further processing. This is only sensible when these numbers signify some sort of numeric quantity and value.
+* **Thermometer code** - useful if your discrete values have a natural ordering (well-ordered), but not a natural mapping into real numbers. The strategy here is to use a vector of length $k$ binary variables, s.t. discrete input value $0 < j \leq k$ into a vector s.t. the first j values are $1.0$, and the rest are $0.0$. Does not mean anything for spacing or numerical quantities, but does convey ordering.
+* **Factored code** - if your discretes can be broken down into two parts, like "make" and "model", then it's best to treat those separately. 
+* **One-hot code** - if there's no obvious numeric, ordering, or factorial structure, then the best strategy is to use a vector of length $k$, where we convert discrete input value $0 < j \leq k$ into a vector in which all values are $0.0$, except for the $jth$, which is $1.0$.
+* **Binary code** - representing as a binary number, which lets us represent k values using a vector of length $\log{k}$. Not great though - your system then has to learn the decoding algorithm too.
+
+As an example, how would we encode blood types? The set of blood types is ${A+,A-,B+,B-,AB+,AB-,O+,O-}$. No linear relationship, ordering here. We do have a factoring: ${A, B, AB, O}$ and ${+,-}$. We could even make the first group ${A, notA}$, ${B, notB}$. So, some possible encodings:
+
+* Use a 6-D vector, with two dimensions to encode each factor with a one-hot encoding. $AB+$ here would be $(-1.0,-1.0,1.0,-1.0,1.0,-1.0)$. $A+$ would be $(1.0,-1.0,-1.0,-1.0,1.0,-1.0)$. Could replace $1.0$ with $0.0$
+* Use a 3-D vector, with one dimension for each factor, encoding its presence as $1.0$ and absence as $-1.0$ (sometimes better than 0.0). In this case, $AB+$ would be $(1.0,1.0,1.0)$ and $O-$ would be $(-1.0,-1.0,-1.0)$. A+ would be $(1.0,-1.0,1.0)$.
+
+### Text
+
+Text is harder, as you might guess. We cover sequential input models later on - in these, you feed a hypothesis in word-by-word, or even character-by-character! Some simpler encodings include *bag-of-word* (bow) models. Here, you let $d$ be the number of words in our vocab (computed from training set or some other body of text/dictionary). Then, you make a binary vector (with values of $1.0$ and $0.0$) of length $d$, where element $j$ has value $1.0$ if word $j$ occurs in the document, and $0.0$ otherwise.
+
+### Numeric values
+
+If a feature is already numeric, you should probably leave it as such. However, if there are natural breakpoints, like in encoding age, where being over 18/21 in the US marks adulthood, you can encode differently depending on what your goal is. In the prior case, you could bucket values into bins. You could also use a one-hot encoding for medical situations where we don't expect a linear/monotonic relationship between age and physiological features.
+
+If you leave it as numeric, it's useful to scale it so that would put it in the range $[-1.0, +1.0]$. This is useful so the algo doesn't have to work to put parameters that are very different from one another on an equal basis. To standardize, we could apply the transformation $\phi(x) = \frac{x-\bar{x}}{\sigma}$. This normalizes your data so we have mean $0$ and stddev $1$. Note that this isn't great when distance/units matter!
+
+You could also apply a polynomial basis to transform one or more groups of numeric features.

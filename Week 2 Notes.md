@@ -86,7 +86,7 @@ If:
 1. There is $\theta^*$ such that $y^{(i)}\frac{\theta^* x^{(i)}}{||\theta^*||} \geq \gamma$ for all $i$
    *  Equivalent to saying that margin of $\theta^*$ w.r.t $D$ $\geq \gamma$
 2. $||x^{(i)}|| \leq R$
-   * i.e. your points are within a circle of radius R
+   * i.e. your points are within a circle of radius R. Think of this as Euclidean norm, so Radius of circle centered at origin
 3. Our dataset $D$ is linearly separable
 
 Then the perceptron will make at most $(\frac{R}{\gamma})^2$ mistakes. A "mistake" is when you get to the innermost loop - as in you don't get the right prediction. 

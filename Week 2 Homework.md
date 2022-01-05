@@ -25,11 +25,13 @@ Add a dimension with the same value for each point to your data. This is because
 
 **np.zeros(shape)** - returns array of zeros of shape (x,y) or length n
 
-**np.ndarray.shape** - method that returns shape of array
+**np.ndarray.shape** - method that returns shape of array. If you want to reshape a one-d array into a column, you can do ar.reshape(-1,1)
 
 **np.array.dot/@** - matrix multiplication. Seems like @ is best practice
 
 To get a single column out of a numpy array, do: array[:, i:i+1], don't try to index it. Just saves you some headache.
+
+**Can access a single element with array[row,col]**
 
 ## Cross Validation
 
